@@ -8,6 +8,10 @@ Shader "BillboardSimple"
    SubShader 
    {
       Tags {"Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent"}
+      Cull Off
+		Lighting Off
+		ZWrite Off
+		Blend One OneMinusSrcAlpha
       Pass 
       {   
          CGPROGRAM
@@ -53,7 +57,9 @@ Shader "BillboardSimple"
 
          float4 frag(vertexOutput input) : COLOR
          {
-            return tex2D(_MainTex, float2(input.tex.xy))*_Color;   
+             fixed4 c = tex2D(_MainTex, float2(input.tex.xy))*_Color;
+             c.rgb *= c.a;
+             return  c;
          }
 
          ENDCG
